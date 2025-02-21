@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from PyPDF2 import PdfWriter as Writer, PdfReader as Reader
 from PyPDF2.generic import AnnotationBuilder
 import argparse
@@ -10,14 +12,49 @@ __author__ = "Phyu"
 
 
 __version__ = f"{__maj__}.{__min__}.{__rev__}"
-page_box = [
+
+""" ANSI color codes """
+BLACK = "\033[0;30m"
+RED = "\033[0;31m"
+GREEN = "\033[0;32m"
+BROWN = "\033[0;33m"
+BLUE = "\033[0;34m"
+PURPLE = "\033[0;35m"
+CYAN = "\033[0;36m"
+LIGHT_GRAY = "\033[0;37m"
+DARK_GRAY = "\033[1;30m"
+LIGHT_RED = "\033[1;31m"
+LIGHT_GREEN = "\033[1;32m"
+YELLOW = "\033[1;33m"
+LIGHT_BLUE = "\033[1;34m"
+LIGHT_PURPLE = "\033[1;35m"
+LIGHT_CYAN = "\033[1;36m"
+LIGHT_WHITE = "\033[1;37m"
+BOLD = "\033[1m"
+FAINT = "\033[2m"
+ITALIC = "\033[3m"
+UNDERLINE = "\033[4m"
+BLINK = "\033[5m"
+NEGATIVE = "\033[7m"
+CROSSED = "\033[9m"
+ENDC = "\033[0m"
+
+a4_page_box = [
         0,
         0,
         612,
         792
     ]
 
+ERROR= 0
+WARN= 1
+INF=2
+OUT=3
+DBG=4
+
 output = Writer()
+
+
 
 def banner():
     if not args.quiet:
@@ -35,7 +72,6 @@ Author: {__author__}
               """)
 
 
-
 parser = argparse.ArgumentParser(
     prog='lmaonate',
     description='A python script to add whole page links into PDFs rather than have to pay for acrobat writer'
@@ -48,11 +84,41 @@ parser.add_argument("-q",dest="quiet", action="store_true")
 
 args = parser.parse_args() 
 
+def fancy_print(level: int, message: str):
 
+    if level == ERROR:
+        bullet = f"[{RED}!{ENDC}]"
+    elif level == WARN:
+        bullet = f"[{YELLOW}!{ENDC}]"
+    elif level == INF:
+        bullet = f"[{BLUE}*{ENDC}]"
+    elif level == OUT:
+        bullet = f"[{GREEN}*{ENDC}]"
+    elif level == DBG:
+        bullet = f"[{BLUE}?{ENDC}]"
+    else:
+        bullet = "[*]"
+    print (f"{bullet} - {message}")
+
+
+def err_print(message: str):
+    fancy_print(ERROR, message)
+
+def warn_print(message: str):
+    fancy_print(WARN, message)
+
+def inf_print(message: str):
+    fancy_print(INF, message)
+
+def out_print(message: str):
+    fancy_print(OUT, message)
+
+def dbg_print(message: str):
+    fancy_print(DBG, message)
 
 def modify_pdf(infile_path: str, outfile_path: str):
     url = args.url
-    print(f"Adding link '{url}' to PDF saved to '{outfile_path}'")
+    out_print(f"Adding link '{url}' to PDF saved to '{outfile_path}'")
     
     with open (infile_path, "rb") as f:
         pdf = Reader(f)
@@ -70,7 +136,7 @@ def modify_pdf(infile_path: str, outfile_path: str):
             p = pdf.pages[i]
             output.add_page(p)
            
-            link = AnnotationBuilder.link(page_box, None, url=url)          
+            link = AnnotationBuilder.link(a4_page_box, None, url=url)          
             output.add_annotation(page_number=i,annotation= link)
             
             with open(outfile_path,"wb") as out_stream:

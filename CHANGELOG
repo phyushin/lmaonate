@@ -1,0 +1,2 @@
+1.0.1 - Slight refactor, changed the name of the function that modifies the PDF from `ReadPDF` to `ModifyPDF`
+1.0.0 - Initial Version

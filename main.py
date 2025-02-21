@@ -4,7 +4,7 @@ import argparse
 
 __maj__ = 1
 __min__ = 0
-__rev__ = 0
+__rev__ = 1
 
 __author__ = "Phyu"
 
@@ -50,32 +50,24 @@ args = parser.parse_args()
 
 
 
-def readPDF(file_path: str):
-    with open (file_path, "rb") as f:
+def modifyPDF(infile_path: str, outfile_path: str):
+    with open (infile_path, "rb") as f:
         pdf = Reader(f)
         page_count = len(pdf.pages)
         
         for i in range(page_count):
             p = pdf.pages[i]
             output.add_page(p)
-
-
-            
             url = args.url
-
-            link = AnnotationBuilder.link(page_box, None, url=url)
-            #output.addLink(i, url, rect)
-          
+            link = AnnotationBuilder.link(page_box, None, url=url)          
             output.add_annotation(page_number=i,annotation= link)
-
-            with open(args.outfile,"wb") as out_stream:
+            
+            with open(outfile_path,"wb") as out_stream:
                 output.write(out_stream)
-
-
 
 def main():
     banner()
-    readPDF(args.infile)
+    modifyPDF(args.infile, args.outfile)
 
 if __name__ == "__main__":
     main()

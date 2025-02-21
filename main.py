@@ -50,7 +50,7 @@ args = parser.parse_args()
 
 
 
-def modifyPDF(infile_path: str, outfile_path: str):
+def modify_pdf(infile_path: str, outfile_path: str):
     with open (infile_path, "rb") as f:
         pdf = Reader(f)
         page_count = len(pdf.pages)
@@ -67,7 +67,7 @@ def modifyPDF(infile_path: str, outfile_path: str):
 
 def main():
     banner()
-    modifyPDF(args.infile, args.outfile)
+    modify_pdf(args.infile, args.outfile)
 
 if __name__ == "__main__":
     main()

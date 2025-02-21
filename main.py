@@ -4,7 +4,7 @@ import argparse
 
 __maj__ = 1
 __min__ = 0
-__rev__ = 1
+__rev__ = 2
 
 __author__ = "Phyu"
 
@@ -51,6 +51,9 @@ args = parser.parse_args()
 
 
 def modify_pdf(infile_path: str, outfile_path: str):
+    url = args.url
+    print(f"Adding link '{url}' to PDF saved to '{outfile_path}'")
+    
     with open (infile_path, "rb") as f:
         pdf = Reader(f)
         page_count = len(pdf.pages)
@@ -58,7 +61,7 @@ def modify_pdf(infile_path: str, outfile_path: str):
         for i in range(page_count):
             p = pdf.pages[i]
             output.add_page(p)
-            url = args.url
+           
             link = AnnotationBuilder.link(page_box, None, url=url)          
             output.add_annotation(page_number=i,annotation= link)
             

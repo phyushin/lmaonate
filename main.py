@@ -6,7 +6,7 @@ import argparse
 
 __maj__ = 1
 __min__ = 0
-__rev__ = 3
+__rev__ = 5
 
 __author__ = "Phyu"
 
@@ -54,8 +54,6 @@ DBG=4
 
 output = Writer()
 
-
-
 def banner():
     if not args.quiet:
         print(f"""
@@ -85,7 +83,6 @@ parser.add_argument("-q",dest="quiet", action="store_true")
 args = parser.parse_args() 
 
 def fancy_print(level: int, message: str):
-
     if level == ERROR:
         bullet = f"[{RED}!{ENDC}]"
     elif level == WARN:
@@ -99,7 +96,6 @@ def fancy_print(level: int, message: str):
     else:
         bullet = "[*]"
     print (f"{bullet} - {message}")
-
 
 def err_print(message: str):
     fancy_print(ERROR, message)
@@ -124,7 +120,13 @@ def modify_pdf(infile_path: str, outfile_path: str):
         pdf = Reader(f)
         meta = pdf.metadata
 
+        print(meta)
+
         output.add_metadata({
+            "/Author":f"{meta.author}",
+            "/Creator":f"{meta.creator}",
+            "/CreationDate":f"{meta.creation_date}",
+            "/ModDate":f"{meta.modification_date}",
             "/Title": f"{meta.title}",
             "/Producer":f"{meta.producer}"
             }
@@ -137,7 +139,7 @@ def modify_pdf(infile_path: str, outfile_path: str):
             output.add_page(p)
            
             link = AnnotationBuilder.link(a4_page_box, None, url=url)          
-            output.add_annotation(page_number=i,annotation= link)
+            output.add_annotation(page_number=i, annotation=link)
             
             with open(outfile_path,"wb") as out_stream:
                 output.write(out_stream)

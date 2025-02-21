@@ -1,3 +1,4 @@
+1.0.3 - Copy metadata from original doc
 1.0.2 - Added output of both link and destination path
 1.0.1 - Slight refactor, changed the name of the function that modifies the PDF from `ReadPDF` to `modify_pdf`, passed in both in and out file args
 1.0.0 - Initial Version

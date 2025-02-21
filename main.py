@@ -4,7 +4,7 @@ import argparse
 
 __maj__ = 1
 __min__ = 0
-__rev__ = 2
+__rev__ = 3
 
 __author__ = "Phyu"
 
@@ -56,6 +56,14 @@ def modify_pdf(infile_path: str, outfile_path: str):
     
     with open (infile_path, "rb") as f:
         pdf = Reader(f)
+        meta = pdf.metadata
+
+        output.add_metadata({
+            "/Title": f"{meta.title}",
+            "/Producer":f"{meta.producer}"
+            }
+        )
+
         page_count = len(pdf.pages)
         
         for i in range(page_count):

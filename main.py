@@ -6,7 +6,7 @@ import argparse
 
 __maj__ = 1
 __min__ = 0
-__rev__ = 5
+__rev__ = 6
 
 __author__ = "Phyu"
 
@@ -74,13 +74,15 @@ parser = argparse.ArgumentParser(
     prog='lmaonate',
     description='A python script to add whole page links into PDFs rather than have to pay for acrobat writer'
 )
-
+dbg = False
 parser.add_argument("-i","--infile",dest="infile", required=True)
 parser.add_argument("-o","--outfile",dest="outfile", required=True)
 parser.add_argument("-u","--url",dest="url", required=True)
 parser.add_argument("-q",dest="quiet", action="store_true")
-
+parser.add_argument("-d","--debug", dest="debug", action="store_true")
 args = parser.parse_args() 
+
+dbg=args.debug
 
 def fancy_print(level: int, message: str):
     if level == ERROR:
@@ -92,7 +94,8 @@ def fancy_print(level: int, message: str):
     elif level == OUT:
         bullet = f"[{GREEN}*{ENDC}]"
     elif level == DBG:
-        bullet = f"[{BLUE}?{ENDC}]"
+        if dbg:
+            bullet = f"[{BLUE}?{ENDC}]"
     else:
         bullet = "[*]"
     print (f"{bullet} - {message}")
@@ -120,13 +123,13 @@ def modify_pdf(infile_path: str, outfile_path: str):
         pdf = Reader(f)
         meta = pdf.metadata
 
-        print(meta)
+        dbg_print(meta)
 
         output.add_metadata({
             "/Author":f"{meta.author}",
             "/Creator":f"{meta.creator}",
-            "/CreationDate":f"{meta.creation_date}",
-            "/ModDate":f"{meta.modification_date}",
+            "/CreationDate":f"{meta.creation_date_raw}",
+            "/ModDate":f"{meta.modification_date_raw}",
             "/Title": f"{meta.title}",
             "/Producer":f"{meta.producer}"
             }

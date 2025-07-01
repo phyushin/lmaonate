@@ -98,7 +98,7 @@ def fancy_print(level: int, message: str):
         if dbg:
             bullet = f"[{BLUE}?{ENDC}]"
     else:
-        bullet = "[*]"
+        bullet = "[*]" #it should already be this but we need to initialise it
     print (f"{bullet} - {message}")
 
 def err_print(message: str):

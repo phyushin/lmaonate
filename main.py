@@ -85,6 +85,7 @@ args = parser.parse_args()
 dbg=args.debug
 
 def fancy_print(level: int, message: str):
+    bullet = "[*]"
     if level == ERROR:
         bullet = f"[{RED}!{ENDC}]"
     elif level == WARN:

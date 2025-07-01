@@ -6,7 +6,7 @@ import argparse
 
 __maj__ = 1
 __min__ = 0
-__rev__ = 6
+__rev__ = 7
 
 __author__ = "Phyu"
 

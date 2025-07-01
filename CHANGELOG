@@ -1,3 +1,5 @@
+1.0.7 - Fix issue where bullet variable can be uninitialised and cause crash
+1.0.6 - Fix crash when copying meta data from a mac created pdf...
 1.0.5 - Add more metadata fields to be copied 
 1.0.4 - Made printing prettier!
 1.0.3 - Copy metadata from original doc
